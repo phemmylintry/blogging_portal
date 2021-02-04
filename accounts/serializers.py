@@ -12,10 +12,12 @@ class CustomerUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(write_only=True, min_length=8)
+    posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'password', 'username')
+        fields = ('id', 'email', 'password', 'username', 'posts', 'comments')
 
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
