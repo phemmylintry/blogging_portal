@@ -5,7 +5,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authentication import TokenAuthentication
 
-from .serializers import CustomerUserSerializer, UserLoginSerializer
+from .serializers import CustomUserSerializer, UserLoginSerializer
+
+from drf_yasg.utils import swagger_auto_schema
 
 class UserCreateView(APIView):
 
@@ -13,8 +15,13 @@ class UserCreateView(APIView):
     Creates a User
     """
 
+    @swagger_auto_schema(
+        request_body = CustomUserSerializer,
+        operation_description = "Create a user" 
+    )
+
     def post(self, request, format='json'):
-        serializer = CustomerUserSerializer(data=request.data)
+        serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
 
